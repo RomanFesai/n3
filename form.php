@@ -6,15 +6,14 @@
     <title>n3</title>
       <link href="style.css" rel="stylesheet" />
   </head>
-
+  
 <body>
   <div class="navform">
-            <h2>Форма<a id=“down”></a></h2>
-
-            <form action="http://example.com"
+            <h2>Form<a id=“down”></a></h2>
+            <form action=""
                   method="GET">
                 <label>
-                    Имя:<br />
+                    Name:<br />
                     <input name="Name"
                            value="" />
                 </label><br />
@@ -24,15 +23,14 @@
                            value=""
                            type="email" />
                 </label><br />
-
                 <label>
-                    Дата Рождения:<br />
+                    Birthday:<br />
                     <input name="field-date"
                            value="2019-08-13"
                            type="text" />
                 </label><br />
                 <div>
-                    Кол-во конечностей: <br />
+                    Number of limbs: <br />
                     <input type="radio"
                            name="Konechnosti"
                            checked="checked"
@@ -45,22 +43,22 @@
                            value="8 and more"> 8+ <br />
                 </div>
                 <div>
-                    Сверхспособности:<br />
+                   	Superpowers:<br />
                     <select name="Sverxsposobnosti" multiple="multiple">
-                        <option value="One">Многопространственость</option>
-                        <option value="Two">Изгибание времени</option>
-                        <option value="Three">Фундаментальное бессмертие </option>
+                        <option value="One">Multidimensionality</option>
+                        <option value="Two">Bending time</option>
+                        <option value="Three">Fundamental immortality </option>
                     </select>
                 </div>
                 <div>
-                    Биография:<br />
-                    <textarea name="Biografy">Желательно в подробностях</textarea>
+                    Biography:<br />
+                    <textarea name="Biografy"></textarea>
                 </div>
                 <div>
-                    <input type="checkbox" checked="checked">C контрактом ознакомлен<br />
+                    <input type="checkbox" checked="checked">Acquainted with the contract<br />
                 </div>
                 <p>
-                    <input type="submit" value="Отправить">
+                    <input type="submit" value="OK">
                 </p>
             </form>
         </div>
