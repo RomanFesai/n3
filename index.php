@@ -1,80 +1,63 @@
 <?php
-/**
- * Интернет-программирование. Задача 8.
- * Реализовать скрипт на веб-сервере на PHP или другом языке,
- * сохраняющий в XML-файл заполненную форму задания 7. При
- * отправке формы на сервере создается новый файл с уникальным именем.
- */
-
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
-
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
-  if (!empty($_GET['save'])) {
-    // Если есть параметр save, то выводим сообщение пользователю.
-    print('Спасибо, результаты сохранены.');
-  }
-  // Включаем содержимое файла form.php.
-  include('form.php');
-  // Завершаем работу скрипта.
-  exit();
+    if (!empty($_GET['save'])) {
+        print("<script language=javascript>window.alert('Спасибо, результаты сохранены');</script>");
+    }
+    include('form.php');
+    exit();
 }
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
 
-// Проверяем ошибки.
+include('form.php');
 $errors = FALSE;
-if (empty($_POST['fio'])) {
-  print('Заполните имя.<br/>');
-  $errors = TRUE;
+if (empty($_POST['Name'])) {
+    print("<script language=javascript>window.alert('Enter Name');</script>");
+    $errors = TRUE;
 }
-
-// *************
-// Тут необходимо проверить правильность заполнения всех остальных полей.
-// *************
-
-if ($errors) {
-  // При наличии ошибок завершаем работу скрипта.
-  exit();
+if (empty($_POST['Email'])) {
+    print("<script language=javascript>window.alert('Enter Email');</script>");
+    $errors = TRUE;
 }
+if (empty($_POST['BG'])) {
+    print("<script language=javascript>window.alert('Enter Biografy');</script>");
+    $errors = TRUE;
+}
+if (count($_POST['SP'])==0) {
+    print("<script language=javascript>window.alert('Enter SuperPowers');</script>");
+    $errors = TRUE;
+}
+if (empty($_POST['DD']) or empty($_POST['DM']) or empty($_POST['DY']) or !ctype_digit($_POST['DD']) or !ctype_digit($_POST['DM']) or !ctype_digit($_POST['DY'])) {
+    print("<script language=javascript>window.alert('Enter correct Date of Birth');</script>");
+    $errors = TRUE;
+}
+if(isset($_POST['CH']) &&
+    $_POST['CH'] == 'Yes')
+{
+    $ch='OZNACOMLEN';
+}
+else
+{
+    print("<script language=javascript>window.alert('Сheck the checkbox');</script>");
+    $errors = TRUE;
+}
+if($errors) { exit();};
 
-// Сохранение в базу данных.
 
-$user = 'db';
-$pass = '123';
-$db = new PDO('mysql:host=localhost;dbname=test', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+$sp='';
 
-// Подготовленный запрос. Не именованные метки.
+for($i=0;$i<count($_POST['SP']);$i++){
+    $sp .= $_POST['SP'][$i] . '  ';
+}
+$user = 'u20237';
+$pass = '8241663';
+$db = new PDO('mysql:host=localhost;dbname=u20237', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+
 try {
-  $stmt = $db->prepare("INSERT INTO application (name) SET name = ?");
-  $stmt -> execute(array('fio'));
+    $stmt = $db->prepare("INSERT INTO formOne (NAME,EMAIL,YEAR,SEX,Nol,SUPERPOWERS,BIO,CHECKBOX) VALUES (:NAME,:EMAIL,:YEAR,:SEX,:NoL,:SUPERPOWERS,:BIO,:CHECKBOX)");   //добавление в базу данные
+    $stmt -> execute(array('NAME'=>$_POST['Name'], 'EMAIL'=>$_POST['Email'],'YEAR'=>$_POST['DY'],'SEX'=>$_POST['Rad'],'NoL'=>$_POST['Limbs'], 'SUPERPOWERS'=>$sp, 'BIO'=>$_POST['BG'], 'CHECKBOX'=>$ch));
 }
 catch(PDOException $e){
-  print('Error : ' . $e->getMessage());
-  exit();
+    print('Error : ' . $e->getMessage());
+    exit();
 }
-
-//  stmt - это "дескриптор состояния".
- 
-//  Именованные метки.
-//$stmt = $db->prepare("INSERT INTO test (label,color) VALUES (:label,:color)");
-//$stmt -> execute(array('label'=>'perfect', 'color'=>'green'));
- 
-//Еще вариант
-/*$stmt = $db->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
-$stmt->bindParam(':firstname', $firstname);
-$stmt->bindParam(':lastname', $lastname);
-$stmt->bindParam(':email', $email);
-$firstname = "John";
-$lastname = "Smith";
-$email = "john@test.com";
-$stmt->execute();
-*/
-
-// Делаем перенаправление.
-// Если запись не сохраняется, но ошибок не видно, то можно закомментировать эту строку чтобы увидеть ошибку.
-// Если ошибок при этом не видно, то необходимо настроить параметр display_errors для PHP.
-header('Location: ?save=1');
+?>
