@@ -83,7 +83,7 @@
       			<div class="my-2">
       				<div class="form-group">
       					<label for="exampleSelect2">Superpowers</label>
-      					<select multiple="multiple" class="form-control" name="SP[]">
+      					<select multiple="multiple" class="form-control" name="SP">
         				<option>Great power</option>
        					<option>Invisibility</option>
 				        <option>Absolute knowledge</option>
